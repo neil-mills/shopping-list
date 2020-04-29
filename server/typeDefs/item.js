@@ -1,12 +1,10 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-  scalar Date
-
   type Price {
-    date: Date
-    price: Float
-    retailerID: ID
+    date: Date!
+    price: Float!
+    retailerID: ID!
   }
 
   type Item {
@@ -20,13 +18,19 @@ const typeDefs = gql`
     recurring: Boolean
   }
 
+  input PriceInput {
+    date: Date!
+    price: Float!
+    retailerId: ID!
+  }
+
   input ItemInput {
     _id: ID!
     name: String!
     categories: [ID]
     brandId: ID!
     sizes: [ID]
-    prices: [Price]
+    prices: [PriceInput]
     favourite: Boolean
     recurring: Boolean
   }
@@ -41,7 +45,7 @@ const typeDefs = gql`
   type Mutation {
     createItem(item: ItemInput): Item
     updateItem(item: ItemInput): Item
-    deleteItem(id: ID):
+    deleteItem(id: ID): Item
   }
 `;
 

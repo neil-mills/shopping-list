@@ -1,12 +1,11 @@
 const { Schema, model } = require('mongoose');
 
-const subCategorySchema = new Schema({
-  name: String
-});
 
 const categorySchema = new Schema({
-  name: String,
-  subCategory: [subCategorySchema]
+  name: {
+    type: String,
+    required: true
+  }
 });
 
 const Category = model('Category', categorySchema);

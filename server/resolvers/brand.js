@@ -1,5 +1,5 @@
-
-const Brand = require('./brand.model');
+const Brand = require('../models/Brand');
+const validator = require('validator');
 
 const resolvers = {
   Query: {
@@ -18,23 +18,31 @@ const resolvers = {
       } catch (e) {
         console.log(e);
       }
-    }
+    },
   },
   Mutation: {
     createBrand: async (parent, { brand }, context) => {
       try {
+        if (validator.isEmpty(brand.name)) {
+          console.log('name is empty')
+          throw new Error('Brand name is empty');
+        }
         const newBrand = await Brand.create({ ...brand });
         return newBrand;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateBrand: async (parent, { brand }, context) => {
       try {
-        const updatedBrand = await findOneAndUpdate({ _id: item._id }, { ...brand }, { new: true });
+        const updatedBrand = await findOneAndUpdate(
+          { _id: item._id },
+          { ...brand },
+          { new: true }
+        );
         return updatedBrand;
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     },
     deleteBrand: async (parent, { id }, context) => {
@@ -44,8 +52,8 @@ const resolvers = {
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };
 
 module.exports = resolvers;

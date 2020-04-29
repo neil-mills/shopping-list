@@ -1,0 +1,1 @@
+const catchErrors = fn => 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { use } from '@apollo/react-hooks';
 import { GET_POSTS } from './withPosts';
 
 const ADD_POST = gql`

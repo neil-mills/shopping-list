@@ -1,32 +1,26 @@
 const { gql } = require('apollo-server-express');
-
 const typeDefs = gql`
-
-  type Brand {
+  type Size {
     _id: ID!
-    name: String!
-    retailerId: ID!
+    size: Float!
+    unitId: ID!
   }
-
-  input BrandInput {
+  input SizeInput {
     _id: ID!
-    name: String!
-    retailerId: ID!
+    size: Float!
+    unitId: ID!
   }
-
   # define the query type that responds to the 'posts' query
   type Query {
-    brands: [Brand]
-    brand(id:ID): Brand
+    sizes(itemId:ID): [Size]
   }
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createBrand(brand: BrandInput): Brand
-    updateBrand(brand: BrandInput): Brand
-    deleteBrand(id: ID):Boolean
+    createSize(size: SizeInput): Size
+    updateSize(size: SizeInput): Size
+    deleteSize(id: ID): Size
   }
 `;
 
 module.exports = typeDefs;
-

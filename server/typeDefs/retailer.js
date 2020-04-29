@@ -1,30 +1,25 @@
 const { gql } = require('apollo-server-express');
-
 const typeDefs = gql`
-
-  type Category {
+  type Retailer {
     _id: ID!
     name: String!
   }
-
-  input CategoryInput {
-    _id: ID!
+  input RetailerInput {
+    _id: ID
     name: String!
-      }
-
+  }
   # define the query type that responds to the 'posts' query
   type Query {
-    categories: [Category]
-    category(id:ID): Category
+    retailers: [Retailer]
+    retailer(id: ID): Retailer
   }
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createCategory(category: CategoryInput): Category
-    updateCategory(category: CategoryInput): Category
-    deleteItem(id: ID): Category
+    createRetailer(retailer: RetailerInput): Retailer
+    updateRetailer(retailer: RetailerInput): Retailer
+    deleteRetailer(id: ID): Retailer
   }
 `;
 
 module.exports = typeDefs;
-

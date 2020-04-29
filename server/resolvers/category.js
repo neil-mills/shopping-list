@@ -1,5 +1,5 @@
 
-const Category = require('./category.model');
+const Category = require('../models/Category');
 
 const resolvers = {
   Query: {
@@ -37,7 +37,7 @@ const resolvers = {
         console.log(e)
       }
     },
-    deleteItem: async (parent, { id }, context) => {
+    deleteCategory: async (parent, { id }, context) => {
       try {
         const item = await Category.findByIdAndRemove({ _id: id });
         return await Category.findOne({ _id: id });
@@ -46,22 +46,6 @@ const resolvers = {
       }
     }
   },
-  Date: new GraphQLScalarType({
-    name: 'Date',
-    description: 'Date custom scalar',
-    parseValue(value) {
-      return new Date(value); // value from the client
-    },
-    serialize(value) {
-      return value.getTime(); //value sent to the client
-    },
-    parseLiteral(ast) {
-      if (ast.kind === Kind.INT) {
-        return new Date(ast.value);
-      }
-      return null;
-    }
-  })
 };
 
 module.exports = resolvers;

@@ -1,7 +1,4 @@
-import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
-
-const Item = require('./item.model');
+const Item = require('../models/Item');
 
 const resolvers = {
   Query: {
@@ -48,22 +45,6 @@ const resolvers = {
       }
     }
   },
-  Date: new GraphQLScalarType({
-    name: 'Date',
-    description: 'Date custom scalar',
-    parseValue(value) {
-      return new Date(value); // value from the client
-    },
-    serialize(value) {
-      return value.getTime(); //value sent to the client
-    },
-    parseLiteral(ast) {
-      if (ast.kind === Kind.INT) {
-        return new Date(ast.value);
-      }
-      return null;
-    }
-  })
 };
 
 module.exports = resolvers;

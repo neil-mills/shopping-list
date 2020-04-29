@@ -1,4 +1,4 @@
-const List = require('./list.model');
+const List = require('../models/List');
 
 const resolvers = {
   Query: {

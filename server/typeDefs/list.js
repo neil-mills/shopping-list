@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server-express');
-const typeDefs = gql`
 
+
+const typeDefs = gql`
   type ListItem {
     _id: ID!
     itemId: ID!
@@ -19,7 +20,7 @@ const typeDefs = gql`
   input ListInput {
     _id: ID!
     date: Date!
-    items: [ListItem]
+    items: [ListItemInput]
     authorId: ID
     retailerId: ID
     complete: Boolean
@@ -34,8 +35,8 @@ const typeDefs = gql`
   # define the query type that responds to the 'posts' query
   type Query {
     lists(userId:ID): [List]
-    List(id:ID): List
-    listItems(listId:ID): [ListItems]
+    list(id:ID): List
+    listItems(listId:ID): [ListItem]
   }
 
   # define the mutation to add new posts with required fields, which
