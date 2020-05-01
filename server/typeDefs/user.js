@@ -34,7 +34,7 @@ const typeDefs = gql`
   type Query {
     user(id:ID): User
     users: [User]
-    currentUser: User @isAuthenticated
+    currentUser: User 
     loginUser(email: String!, password: String!): Token
   }
   type Mutation {

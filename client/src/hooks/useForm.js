@@ -10,7 +10,6 @@ export const useForm = (callback, data) => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log(callback)
-    console.log('submit')
     callback(values)
   }
 

@@ -1,19 +1,27 @@
-import ApolloClient from 'apollo-boost';
-
+import ApolloClient, { InMemoryCache } from 'apollo-boost';
+import { typeDefs } from './typeDefs';
+import { resolvers } from './resolvers';
+const cache = new InMemoryCache();
 
 const client = new ApolloClient({
+  cache,
+  typeDefs,
+  resolvers,
   uri: process.env.REACT_APP_APOLLO_URL || 'http://localhost:3000/graphql',
-  request: async operation => { //called on every request...
-    const token = window.localStorage.getItem('token');  //checks if token has been set in local storage
-    if (token) {
-      operation.setContext({ //if so, forwards it in the bearer authorization header
-        headers: {
-          Authorization: token ? `Bearer ${token}` : ''
-        }
-      })
-      
-    }
+  request: (operation) => {
+    const token = localStorage.getItem('token')
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : ''
+      }
+    })
   }
+});
+
+cache.writeData({
+  data: {
+    isLoggedIn: !!localStorage.getItem('token'),
+  },
 });
 
 export default client;

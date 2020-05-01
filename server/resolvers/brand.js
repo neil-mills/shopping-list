@@ -12,6 +12,7 @@ const resolvers = {
       }
     },
     brand: async (id) => {
+      console.log(id)
       try {
         const brand = await Brand.findOne({ _id: id });
         return brand;

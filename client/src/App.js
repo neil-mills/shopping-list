@@ -2,21 +2,22 @@ import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 
 import apolloClient from './config/createApolloClient';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from './components/Home';
-import Login from './components/Login';
-import Profile from './components/Profile';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import Header from './components/Header';
+import Routes from './components/Routes';
+
 class App extends Component {
   render() {
     return (
       <ApolloProvider client={apolloClient}>
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/profile" component={Profile} />
-          </Switch>
-        </Router>
+        <div>
+          <Router>
+            <Header />
+            <Switch>
+              <Routes />
+            </Switch>
+          </Router>
+        </div>
       </ApolloProvider>
     );
   }

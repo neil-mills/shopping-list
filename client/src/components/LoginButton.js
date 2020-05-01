@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { withCurrentUser } from '../providers';
+import { withIsLoggedIn } from '../providers';
 
-const LoginButton = ({client, data }) => {
+const LoginButton = ({ client, isLoggedIn }) => {
   const logout = () => {
     window.localStorage.clear();
+    client.writeData({ data: { isLoggedIn: false } });
     client.resetStore();
   }
-  if (data && data.currentUser) {
+  if (isLoggedIn) {
     return (
       <button onClick={logout}>Logout</button>
     )
@@ -19,4 +20,4 @@ const LoginButton = ({client, data }) => {
   )
 }
 
-export default withCurrentUser(LoginButton);
+export default withIsLoggedIn(LoginButton);

@@ -3,12 +3,13 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { LOGIN_USER } from './queries';
 
 export const withLoginUser = (Component) => (props) => {
-  const [resolver, { called, loading, data, error }] = useLazyQuery(LOGIN_USER);
-  const loginUser = (args) => resolver({ variables: { ...args } });
+  const [resolver, { client, called, loading, data, error }] = useLazyQuery(LOGIN_USER);
+  const loginUser = (args) => resolver({ variables: { ...args }, fetchPolicy: 'network-only' });
 
   return (
     <Component
       called={called}
+      client={client}
       loading={loading}
       data={data}
       error={error}

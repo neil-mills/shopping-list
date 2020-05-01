@@ -3,15 +3,16 @@ import { Route } from 'react-router-dom';
 import Home from './Home';
 import Login from './Login';
 import Profile from './Profile';
-
-export const Routes = () => {
+import PrivateRoute from './PrivateRoute';
+import { withIsLoggedIn } from '../providers';
+export const Routes = ({ isLoggedIn }) => {
   return (
     <>
       <Route exact path="/" component={Home} />
-      <Route exact path="/login" component={Home} />
-      <Route exact path="/profile" component={Profile} />
+      <Route exact path="/login" component={Login} />
+      <PrivateRoute  redirect="/login" loggedIn={isLoggedIn} exact path="/profile" component={Profile} />
     </>
   )
 }
 
-export default Routes;
+export default withIsLoggedIn(Routes);

@@ -2,15 +2,28 @@ const List = require('../models/List');
 
 const resolvers = {
   Query: {
-    lists: async () => {
+    lists: async (obj, { filters }, context) => {
+      console.log('filters=', filters);
+      let query = { authorId: filters.authorId };
+      query =
+        filters.complete !== undefined
+          ? { ...query, complete: filters.complete }
+          : query;=
+      query = filters.minDate
+        ? { ...query, date: { $gte: filters.minDate } }
+        : query;
+      query = filters.maxDate
+        ? { ...query, date: { $lte: filters.maxDate } }
+        : query;
       try {
-        const lists = await List.find().sort('date-1');
+        const lists = await List.find(query).sort('date-1');
         return lists;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
-    list: async (id) => {
+    list: async (obj, { id }, context) => {
+      console.log('ID=', id);
       try {
         const list = await List.findOne({ _id: id });
         return list;

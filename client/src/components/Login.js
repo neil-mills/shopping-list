@@ -1,25 +1,38 @@
 import React, { Fragment } from 'react';
 import { Redirect } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { useForm, useLocalStorage } from '../hooks';
 import { withLoginUser } from '../providers';
-import LoginButton from './LoginButton';
 
-const Login = ({ called, loading, data, error, loginUser }) => {
+const Login = ({
+  client,
+  called,
+  loading,
+  data,
+  error,
+  loginUser,
+  history,
+}) => {
   const [token, setToken] = useLocalStorage('token');
   const { handleChange, handleSubmit, values } = useForm(loginUser, {
     email: '',
     password: '',
   });
-  
-  if (data) {
-    if(token !== data.loginUser.token) setToken(data.loginUser.token);
-    return <Redirect to="/" />;
+
+  const redirect = async () => {
+    await client.writeData({ data: { isLoggedIn: true } });
+    setToken(data.loginUser.token);
+    history.push('/profile');
+  };
+
+  if (!loading && data && token !== data.loginUser.token) {
+    redirect();
   }
+
   const { email, password } = values;
   return (
     <Fragment>
-      <LoginButton />
-      <h2>Login</h2>
+      <h1>Login</h1>
       {called && loading && <p>Loading</p>}
       {error && <p>Login failed</p>}
       <form onSubmit={handleSubmit}>
@@ -47,7 +60,9 @@ const Login = ({ called, loading, data, error, loginUser }) => {
             />
           </li>
           <li>
-            <button type="submit" disabled={loading}>Login</button>
+            <button type="submit" disabled={loading}>
+              Login
+            </button>
           </li>
         </ul>
       </form>
@@ -55,4 +70,4 @@ const Login = ({ called, loading, data, error, loginUser }) => {
   );
 };
 
-export default withLoginUser(Login);
+export default withLoginUser(withRouter(Login));
