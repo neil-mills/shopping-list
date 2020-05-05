@@ -1,19 +1,11 @@
 const { Schema, model } = require('mongoose');
 
-const listItemSchema = new Schema({
-  itemId: {
-    type: Schema.ObjectId,
-    ref: 'Item'
-  },
-  sizeId: {
-    type: Schema.ObjectId,
-    ref: 'Size'
-  }
-});
-
 const listSchema = new Schema({
   date: Date,
-  items: [listItemSchema],
+  items: {
+    type: [Schema.ObjectId],
+    ref: 'Item'
+  },
   authorId: {
     type: Schema.ObjectId,
     ref: 'User'

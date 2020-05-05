@@ -7,7 +7,7 @@ const resolvers = {
         const units = await Unit.find().sort('name');
         return units;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
   },
@@ -17,7 +17,7 @@ const resolvers = {
         const newUnit = await Unit.create({ ...unit });
         return newUnit;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateUnit: async (parent, { unit }, context) => {
@@ -29,7 +29,7 @@ const resolvers = {
         );
         return updatedUnit;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     deleteUnit: async (parent, { id }, context) => {
@@ -37,7 +37,7 @@ const resolvers = {
         const deletedUnit = Unit.findOneAndRemove({ _id: id });
         return deletedUnit;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
   },

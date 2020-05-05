@@ -40,13 +40,43 @@ const GET_LISTS = gql`
       _id
       date
       items {
-         _id
-        itemId
-        sizeId
+        _id
+        name
+        categoryId {
+          _id
+          name
+        }
+        brandId {
+          _id
+          name
+        }
+        size
+        unitId {
+          _id
+          name
+        }
       }
       authorId
-      retailerId
+      retailerId {
+        name
+      }
       complete
+    }
+  }
+`;
+
+const GET_LIST = gql`
+  query getList($id: ID) {
+    list(id: $id) {
+      _id
+      date
+      items {
+        _id
+        name
+      }
+      retailerId {
+        name
+      }
     }
   }
 `;
@@ -60,11 +90,42 @@ const GET_RETAILERS = gql`
   }
 `;
 
+const GET_BRANDS = gql`
+  query getBrands {
+    brands {
+      _id
+      name
+    }
+  }
+`;
+
+const GET_CATEGORIES = gql`
+  query getCategories {
+    categories {
+      _id
+      name
+    }
+  }
+`;
+
+const GET_UNITS = gql`
+  query getUnits {
+    units {
+      _id
+      name
+    }
+  }
+`;
+
 export {
   GET_CURRENT_USER,
   LOGIN_USER,
   CREATE_LIST,
   GET_LISTS,
+  GET_LIST,
+  GET_BRANDS,
+  GET_CATEGORIES,
+  GET_UNITS,
   IS_LOGGED_IN,
   GET_RETAILERS,
 };

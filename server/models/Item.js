@@ -10,8 +10,8 @@ const priceSchema = new Schema({
 
 const itemSchema = new Schema({
   name: String,
-  categories: {
-    type: [Schema.ObjectId],
+  categoryId: {
+    type: Schema.ObjectId,
     ref: 'Category',
     required: true
   },
@@ -20,9 +20,14 @@ const itemSchema = new Schema({
     ref: 'Brand',
     required: true
   },
-  sizes: {
-    type: [Schema.ObjectId],
-    ref: 'Size'
+  size: {
+    type: Number,
+    required: true
+  },
+  unitId: {
+    type: Schema.ObjectId,
+    ref: 'Unit',
+    required: true
   },
   favourite: Boolean,
   recurring: Boolean,

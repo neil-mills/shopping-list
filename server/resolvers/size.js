@@ -7,9 +7,9 @@ const resolvers = {
         const sizes = await Size.find({ itemId: id }).sort('size');
         return sizes;
       } catch (e) {
-        console.log(e);
+        return e;
       }
-    }
+    },
   },
   Mutation: {
     createSize: async (parent, { size }, context) => {
@@ -17,15 +17,19 @@ const resolvers = {
         const newSize = await Size.create({ ...size });
         return newSize;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateSize: async (parent, { size }, context) => {
       try {
-        const updatedSize = await Size.findOneAndUpdate({ _id: size._id }, { ...size }, { new: true });
+        const updatedSize = await Size.findOneAndUpdate(
+          { _id: size._id },
+          { ...size },
+          { new: true }
+        );
         return updatedSize;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     deleteSize: async (parent, { id }, context) => {
@@ -33,10 +37,10 @@ const resolvers = {
         const deletedSize = await Size.findOneAndDelete({ _id: id });
         return deletedSize;
       } catch (e) {
-        console.log(e);
+        return e;
       }
-    }
-  }
+    },
+  },
 };
 
 module.exports = resolvers;

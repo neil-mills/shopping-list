@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const sizeSchema = new Schema({
-  size: Number,
+  amount: Number,
   unitId: {
     type: Schema.ObjectId,
     ref: 'Unit'

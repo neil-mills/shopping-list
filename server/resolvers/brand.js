@@ -5,14 +5,13 @@ const resolvers = {
   Query: {
     brands: async () => {
       try {
-        const brands = await Brand.find();
+        const brands = await Brand.find().sort('name');
         return brands;
       } catch (e) {
         console.log(e);
       }
     },
     brand: async (id) => {
-      console.log(id)
       try {
         const brand = await Brand.findOne({ _id: id });
         return brand;

@@ -8,7 +8,7 @@ const resolvers = {
         const categories = await Category.find().sort('name');
         return categories;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     category: async (id) => {
@@ -16,7 +16,7 @@ const resolvers = {
         const category = await Category.findOne({ _id: id });
         return category;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     }
   },
@@ -26,7 +26,7 @@ const resolvers = {
         const newCategory = await Category.create({ ...category });
         return newCategory;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateCategory: async (parent, { category }, context) => {
@@ -34,7 +34,7 @@ const resolvers = {
         const updated = await findOneAndUpdate({ _id: category._id }, { ...category }, { new: true });
         return updated;
       } catch (e) {
-        console.log(e)
+        return e
       }
     },
     deleteCategory: async (parent, { id }, context) => {
@@ -42,7 +42,7 @@ const resolvers = {
         const item = await Category.findByIdAndRemove({ _id: id });
         return await Category.findOne({ _id: id });
       } catch (e) {
-        console.log(e);
+        return e;
       }
     }
   },

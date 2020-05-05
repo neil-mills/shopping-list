@@ -3,12 +3,12 @@ const List = require('../models/List');
 const resolvers = {
   Query: {
     lists: async (obj, { filters }, context) => {
-      console.log('filters=', filters);
+      console.log(filters)
       let query = { authorId: filters.authorId };
       query =
         filters.complete !== undefined
           ? { ...query, complete: filters.complete }
-          : query;=
+          : query;
       query = filters.minDate
         ? { ...query, date: { $gte: filters.minDate } }
         : query;
@@ -16,19 +16,27 @@ const resolvers = {
         ? { ...query, date: { $lte: filters.maxDate } }
         : query;
       try {
-        const lists = await List.find(query).sort('date-1');
+        const lists = await List.find(query)
+          .populate('retailerId')
+          .populate('items')
+          .sort('date-1');
         return lists;
       } catch (e) {
         return e;
       }
     },
     list: async (obj, { id }, context) => {
-      console.log('ID=', id);
+      console.log('ID=', id)
       try {
-        const list = await List.findOne({ _id: id });
+        const list = await List.findOne({ _id: id })
+          .populate('retailerId')
+          .populate('items')
+          .populate('items.categoryId')
+          .populate('items.brandId')
+          .populate('items.unitId')
         return list;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
   },
@@ -38,7 +46,7 @@ const resolvers = {
         const newList = await List.create({ ...list });
         return newList;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateList: async (parent, { list }, context) => {
@@ -50,7 +58,7 @@ const resolvers = {
         );
         return updated;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     deleteList: async (parent, { id }, context) => {
@@ -58,7 +66,7 @@ const resolvers = {
         await List.findByIdAndRemove({ _id: id });
         return await List.findOne({ _id: id });
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     createListItem: async (parent, { id, listItem }, context) => {
@@ -76,7 +84,7 @@ const resolvers = {
         );
         return updatedList;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateListItem: async (parent, { listId, listItem }, context) => {

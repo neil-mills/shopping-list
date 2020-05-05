@@ -10,10 +10,10 @@ const typeDefs = gql`
   type List {
     _id: ID!
     date: Date
-    items: [ListItem]
+    items: [Item]
     authorId: ID!
     users: [ID]
-    retailerId: ID!
+    retailerId: Retailer
     complete: Boolean
   }
 

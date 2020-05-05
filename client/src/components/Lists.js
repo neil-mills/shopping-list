@@ -1,13 +1,20 @@
-import React from 'react'
-//import { useQuery } from '@apollo/react-hooks';
-import { GET_LISTS } from '../providers/queries'
-const Lists = () => {
- // const { loading, error, data } = useQuery(GET_LISTS);
+import React from 'react';
+import moment from 'moment';
+
+const Lists = ({ items = [] }) => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <ul>
+      {items.map(({ _id, retailerId: { name }, date, items }) => {
+
+        return (
+          <li key={_id}>
+            <span>{name}, {moment(date).format('DD-MM-YYYY')}, {items.length} Items</span>
+            <button>Edit</button>
+          </li>
+        )
+      })}
+    </ul>
+  );
+};
 
 export default Lists;

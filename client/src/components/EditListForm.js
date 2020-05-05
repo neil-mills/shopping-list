@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from '../hooks';
 import { CREATE_LIST, GET_LISTS, GET_RETAILERS } from '../providers/queries';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import moment from 'moment';
 
 const EditListForm = ({ user }) => {
   const [
@@ -40,7 +41,7 @@ const EditListForm = ({ user }) => {
             type="date"
             name="date"
             id="date"
-            value={values.date}
+            value={values.date || moment().format('YYYY-MM-DD')}
             onChange={handleChange}
           />
         </li>
@@ -52,6 +53,7 @@ const EditListForm = ({ user }) => {
             value={values.retailerId}
             onChange={handleChange}
           >
+            <option value="">Select</option>
             {data &&
               data.retailers.map((r) => (
                 <option key={r._id} value={r._id}>
@@ -59,6 +61,7 @@ const EditListForm = ({ user }) => {
                 </option>
               ))}
           </select>
+          <a title="Add Retailer">Add Retailer</a>
         </li>
         <li>
           <button type="submit">Create List</button>

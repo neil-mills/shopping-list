@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   type Size {
     _id: ID!
-    size: Float!
+    amount: Float!
     unitId: ID!
   }
   input SizeInput {

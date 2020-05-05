@@ -4,10 +4,10 @@ const resolvers = {
   Query: {
     items: async () => {
       try {
-        const items = await Item.find();
+        const items = await Item.find().populate('categoryId').populate('brandId').populate('unitId');
         return items;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     item: async (id) => {
@@ -15,7 +15,7 @@ const resolvers = {
         const item = await Item.findOne({ _id: id });
         return item;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     }
   },
@@ -25,7 +25,7 @@ const resolvers = {
         const newItem = await Item.create({ ...item });
         return newItem;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     updateItem: async (parent, { item }, context) => {
@@ -41,7 +41,7 @@ const resolvers = {
         const item = await findByIdAndRemove({ _id: id });
         return await Item.findOne({ _id: id });
       } catch (e) {
-        console.log(e);
+        return e;
       }
     }
   },

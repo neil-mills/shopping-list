@@ -10,9 +10,10 @@ const typeDefs = gql`
   type Item {
     _id: ID!
     name: String!
-    categories: [ID]
+    categoryId: ID!
     brandId: ID!
-    sizes: [ID]
+    size: Float!
+    unitId: ID!
     prices: [Price]
     favourite: Boolean
     recurring: Boolean
