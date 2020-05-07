@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { GET_CATEGORIES, GET_BRANDS, GET_UNITS } from '../providers/queries';
 
-const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
-  const [editing, toggleEditing] = useState(false);
+const Item = ({ item = {}, retailerId, handleSubmit, handleChange, valid=false, index=1 }) => {
   const {
     loading: categoriesLoading,
     error: categoriesError,
@@ -13,7 +12,7 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
     loading: brandsLoading,
     error: brandsError,
     data: { brands = [] } = {},
-  } = useQuery(GET_BRANDS);
+  } = useQuery(GET_BRANDS, {variables: { retailerId }});
   const {
     loading: unitsLoading,
     error: unitsError,
@@ -22,22 +21,16 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
 
   return (
     <li className="item">
-      {editing || !item.name ? (
         <span>
           <input
             type="text"
             name="name[]"
             id={`name_${index}`}
             onChange={handleChange}
-            value={item.name || ''}
+            value={item.name}
             placeholder="Item"
           />
         </span>
-      ) : (
-        <span>{item.name}</span>
-      )}
-
-      {editing || !item.categoryId ? (
         <span>
           {categoriesLoading && <p>Loading categories</p>}
           {categoriesError && <p>Category Error: {categoriesError.message}</p>}
@@ -45,9 +38,7 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
             name="categoryId[]"
             id={`categoryId_${index}`}
             onChange={handleChange}
-            value={
-              item.categoryId && item.categoryId._id ? item.categoryId._id : ''
-            }
+            value={item.categoryId}
           >
             <option value="">Category</option>
             {!categoriesLoading &&
@@ -61,18 +52,12 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
           </select>
           <button>+ Category</button>
         </span>
-      ) : (
-        <span>
-          {item.categoryId && item.categoryId.name ? item.categoryId.name : ''}
-        </span>
-      )}
-      {editing || !item.brandId ? (
         <span>
           <select
             name="brandId[]"
             id={`brandId_${index}`}
             onChange={handleChange}
-            value={item.brandId && item.brandId._id ? item.brandId._id : ''}
+            value={item.brandId}
           >
             <option value="">Brand</option>
             {!brandsLoading &&
@@ -80,7 +65,7 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
               brands.map((brand) => {
                 return (
                   <option key={brand._id} value={brand._id}>
-                    {brand.name || ''}
+                    {brand.name}
                   </option>
                 );
               })}
@@ -88,32 +73,23 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
           </select>
           <button>+ Brand</button>
         </span>
-      ) : (
-        <span>
-          {item.brandId && item.brandId.name ? item.brandId.name : ''}
-        </span>
-        )}
       <span>
-      {editing || !item.size ? (
         <input
           type="text"
           name="size[]"
           id={`size_${index}`}
           onChange={handleChange}
-          value={item.size || ''}
+          value={item.size}
           placeholder="Size"
+          data-number="true"
         />
-      ): (
-          item.size
-      )}
       </span>
-      {editing || !item.unitId ? (
         <span>
           <select
             name="unitId[]"
             id={`unitId_${index}`}
             onChange={handleChange}
-            value={item.unitId && item.unitId._id ? item.unitId : ''}
+          value={item.unitId}
           >
             <option value="">Unit</option>
             {!unitsLoading && !unitsError && (
@@ -130,13 +106,23 @@ const Item = ({ item = {}, handleChange, valid=false, index=1 }) => {
           </select>
           <button>+ Unit</button>
         </span>
-      ) : (
-        <span>{item.unitId && item.unitId.name ? item.unitId.name : ''}</span>
-        )}
       <span>
-        {index !== 1 && <button>Remove Item</button>}
-        <button disabled={!valid}>Tick</button>
+        &pound;
+        <input
+          type="text"
+          name="price[]"
+          id={`price_${index}`}
+          placeholder="Price"
+          onChange={handleChange}
+          value={item.price}
+          
+          />
       </span>
+      <span>
+        {index !== 0 && <button>Remove Item</button>}
+        <button onClick={handleSubmit} disabled={valid}>Tick</button>
+      </span>
+      <input type="hidden" name="_id[]" value={item._id} />
     </li>
   );
 };

@@ -72,9 +72,18 @@ const GET_LIST = gql`
       date
       items {
         _id
-        name
+        name,
+        categoryId
+        brandId,
+        size,
+        unitId
+        prices {
+          listId
+          price
+        }
       }
       retailerId {
+        _id
         name
       }
     }
@@ -91,8 +100,8 @@ const GET_RETAILERS = gql`
 `;
 
 const GET_BRANDS = gql`
-  query getBrands {
-    brands {
+  query getBrands($retailerId: ID) {
+    brands(retailerId: $retailerId) {
       _id
       name
     }
@@ -117,6 +126,30 @@ const GET_UNITS = gql`
   }
 `;
 
+const CREATE_ITEM = gql`
+  mutation createItem($listId: ID, $item: ItemInput) {
+    createItem(listId: $listId, item: $item) {
+      _id
+    }
+  }
+`;
+
+const UPDATE_ITEM = gql`
+  mutation updateItem($listId: ID, $item: ItemInput) {
+    updateItem(listId: $listId, item: $item) {
+      _id
+    }
+  }
+`;
+
+const DELETE_ITEM = gql`
+  mutation deleteItem($listId: ID, $id: ID) {
+    deleteItem(listId: $listId, id: $id) {
+      _id
+    }
+  }
+`;
+
 export {
   GET_CURRENT_USER,
   LOGIN_USER,
@@ -127,5 +160,8 @@ export {
   GET_CATEGORIES,
   GET_UNITS,
   IS_LOGGED_IN,
+  CREATE_ITEM,
+  UPDATE_ITEM,
+  DELETE_ITEM,
   GET_RETAILERS,
 };

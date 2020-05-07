@@ -3,7 +3,6 @@ const List = require('../models/List');
 const resolvers = {
   Query: {
     lists: async (obj, { filters }, context) => {
-      console.log(filters)
       let query = { authorId: filters.authorId };
       query =
         filters.complete !== undefined
@@ -18,7 +17,6 @@ const resolvers = {
       try {
         const lists = await List.find(query)
           .populate('retailerId')
-          .populate('items')
           .sort('date-1');
         return lists;
       } catch (e) {
@@ -26,14 +24,13 @@ const resolvers = {
       }
     },
     list: async (obj, { id }, context) => {
-      console.log('ID=', id)
       try {
         const list = await List.findOne({ _id: id })
-          .populate('retailerId')
-          .populate('items')
-          .populate('items.categoryId')
-          .populate('items.brandId')
-          .populate('items.unitId')
+          .populate({
+            path: 'items',
+            model: 'Item'
+          })
+          .populate('retailerId').exec()
         return list;
       } catch (e) {
         return e;

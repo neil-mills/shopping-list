@@ -1,12 +1,13 @@
 const { Schema, model } = require('mongoose');
 
 const priceSchema = new Schema({
-  date: Date,
   price: Number,
-  retailerId: {
-    type: Schema.ObjectId
+  listId: {
+    type: Schema.ObjectId,
+    ref: 'List'
   }
 });
+//const Price = model('Price', priceSchema);
 
 const itemSchema = new Schema({
   name: String,
@@ -33,7 +34,5 @@ const itemSchema = new Schema({
   recurring: Boolean,
   prices: [priceSchema]
 });
-
-const Item = model('item', itemSchema);
-
+const Item = model('Item', itemSchema);
 module.exports = Item;

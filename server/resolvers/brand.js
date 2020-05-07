@@ -3,9 +3,16 @@ const validator = require('validator');
 
 const resolvers = {
   Query: {
-    brands: async () => {
+    brands: async (parent, { retailerId }, context) => {
+      console.log('retailerId',retailerId)
       try {
-        const brands = await Brand.find().sort('name');
+        const brands = await Brand.find({
+          $or: [
+            { retailerId: retailerId },
+            { retailerId: undefined },
+            { retailerId: null }
+          ]
+        }).sort('name');
         return brands;
       } catch (e) {
         console.log(e);
@@ -24,7 +31,7 @@ const resolvers = {
     createBrand: async (parent, { brand }, context) => {
       try {
         if (validator.isEmpty(brand.name)) {
-          console.log('name is empty')
+          console.log('name is empty');
           throw new Error('Brand name is empty');
         }
         const newBrand = await Brand.create({ ...brand });

@@ -2,14 +2,14 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Price {
-    date: Date!
-    price: Float!
-    retailerID: ID!
+    listId: ID
+    price: Float
   }
 
   type Item {
     _id: ID!
     name: String!
+    userId: ID!
     categoryId: ID!
     brandId: ID!
     size: Float!
@@ -19,19 +19,15 @@ const typeDefs = gql`
     recurring: Boolean
   }
 
-  input PriceInput {
-    date: Date!
-    price: Float!
-    retailerId: ID!
-  }
-
   input ItemInput {
-    _id: ID!
+    _id: ID
     name: String!
-    categories: [ID]
+    userId: ID!
+    categoryId: ID!
     brandId: ID!
-    sizes: [ID]
-    prices: [PriceInput]
+    unitId: ID!
+    size: Float!
+    price: Float
     favourite: Boolean
     recurring: Boolean
   }
@@ -39,16 +35,16 @@ const typeDefs = gql`
   # define the query type that responds to the 'posts' query
   type Query {
     items: [Item]
-    item(id:ID): Item
+    item(id: ID): Item
+    price(listId: ID): Price
   }
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createItem(item: ItemInput): Item
-    updateItem(item: ItemInput): Item
+    createItem(listId: ID, item: ItemInput): Item
+    updateItem(listId: ID, item: ItemInput): Item
     deleteItem(id: ID): Item
   }
 `;
 
 module.exports = typeDefs;
-
