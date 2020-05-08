@@ -8,7 +8,6 @@ const context = ({ req }) => {
     : null;
    
   if (token) {
-    console.log('TOKEN=',token)
     try {
       token = jwt.verify(token, process.env.JWT_SECRET);
       return {

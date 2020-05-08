@@ -21,9 +21,9 @@ const resolvers = {
     }
   },
   Mutation: {
-    createCategory: async (parent, { category }, context) => {
+    createCategory: async (parent, { category: { name } }, context) => {
       try {
-        const newCategory = await Category.create({ ...category });
+        const newCategory = await Category.create({ name });
         return newCategory;
       } catch (e) {
         return e;

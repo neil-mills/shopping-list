@@ -108,9 +108,47 @@ const GET_BRANDS = gql`
   }
 `;
 
+const CREATE_BRAND = gql`
+  mutation createBrand($brand: BrandInput) {
+    createBrand(brand: $brand) {
+      _id
+      retailerId
+      name
+    }
+  }
+`;
+
+const UPDATE_BRAND = gql`
+  mutation updateBrand($brand: BrandInput) {
+    updateBrand(brand: $brand) {
+      _id
+      retailerId
+      name
+    }
+  }
+`;
+
 const GET_CATEGORIES = gql`
   query getCategories {
     categories {
+      _id
+      name
+    }
+  }
+`;
+
+const CREATE_CATEGORY = gql`
+  mutation createCategory($category: CategoryInput) {
+    createCategory(category: $category) {
+      _id
+      name
+    }
+  }
+`;
+
+const UPDATE_CATEGORY = gql`
+  mutation updateCategory($category: CategoryInput) {
+    updateCategory(category: $category) {
       _id
       name
     }
@@ -157,7 +195,11 @@ export {
   GET_LISTS,
   GET_LIST,
   GET_BRANDS,
+  CREATE_BRAND,
+  UPDATE_BRAND,
   GET_CATEGORIES,
+  CREATE_CATEGORY,
+  UPDATE_CATEGORY,
   GET_UNITS,
   IS_LOGGED_IN,
   CREATE_ITEM,

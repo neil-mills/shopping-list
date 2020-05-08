@@ -3,6 +3,8 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useForm } from '../hooks';
 import { GET_LIST, UPDATE_ITEM, CREATE_ITEM } from '../providers/queries';
 import Item from '../components/Item';
+import EditCategoryForm from '../components/EditCategoryForm';
+import EditBrandForm from '../components/EditBrandForm';
 import { withCurrentUser } from '../providers';
 
 const List = ({ match, data: { currentUser } = {} }) => {
@@ -63,8 +65,8 @@ const List = ({ match, data: { currentUser } = {} }) => {
       const itemObj = getItem(i);
       const item = {
         ...itemObj,
-        size: parseFloat(itemObj.size, 2),
-        price: parseFloat(itemObj.price, 2),
+        size: parseFloat(itemObj.size),
+        price: parseFloat(itemObj.price),
         userId: currentUser._id,
       };
       try {
@@ -96,21 +98,22 @@ const List = ({ match, data: { currentUser } = {} }) => {
   };
 
   const getFormValues = (items = []) => {
-    return items.reduce((res, item) => {
+    const formValues = items.reduce((res, item) => {
       Object.entries(item).forEach(([key, val]) => {
         if (Object.keys(values).includes(key)) {
-          res = { ...res, [key]: res.key ? [...res[key], val] : [val] };
+          res = { ...res, [key]: res[key] ? [...res[key], val] : [val] };
         }
         if (key === 'prices') {
           const itemPrice = val.find((p) => p.listId === list._id);
           if (itemPrice) {
-            const price = itemPrice ? itemPrice.price : '';
+            const price = itemPrice ? itemPrice.price.toFixed(2) : '';
             res = { ...res, price: res.price ? [...res.price, price] : [price]};  
           }
         }
       });
       return res;
     }, {});
+    return formValues;
   };
 
   useEffect(() => {
@@ -165,6 +168,10 @@ const List = ({ match, data: { currentUser } = {} }) => {
         </ul>
       </form>
       <button onClick={() => addItem()}>Add item +</button>
+      <EditCategoryForm />
+      {!loading && !error &&
+      <EditBrandForm retailerId={list.retailerId._id} />
+      }
     </Fragment>
   );
 };

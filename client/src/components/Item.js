@@ -115,11 +115,10 @@ const Item = ({ item = {}, retailerId, handleSubmit, handleChange, valid=false, 
           placeholder="Price"
           onChange={handleChange}
           value={item.price}
-          
           />
       </span>
       <span>
-        {index !== 0 && <button>Remove Item</button>}
+        <button>Remove Item</button>
         <button onClick={handleSubmit} disabled={valid}>Tick</button>
       </span>
       <input type="hidden" name="_id[]" value={item._id} />

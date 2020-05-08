@@ -66,22 +66,23 @@ const resolvers = {
     },
     updateItem: async (
       parent,
-      { listId, item: { _id, name, categoryId, brandId, unitId, size, price = '' } },
+      {
+        listId,
+        item: { _id, name, categoryId, brandId, unitId, size, price = '' },
+      },
       context
     ) => {
       try {
-        console.log('LISTID=',listId);
         const newItem = await Item.findOneAndUpdate(
           { _id: _id },
           { name, categoryId, brandId, unitId, size },
           { new: true }
         );
-       if (price) {
-          
+        if (price) {
           await Item.findOneAndUpdate(
-            { _id: newItem._id, "prices.listId": listId },
-            { $set: { "prices.$.price": price } },
-            { upsert: true }
+            { _id: newItem._id, 'prices.listId': listId },
+            { $set: { 'prices.$.price': price } },
+            { upsert: true, new: true }
           );
         }
         return newItem;

@@ -4,7 +4,6 @@ const validator = require('validator');
 const resolvers = {
   Query: {
     brands: async (parent, { retailerId }, context) => {
-      console.log('retailerId',retailerId)
       try {
         const brands = await Brand.find({
           $or: [
@@ -15,7 +14,7 @@ const resolvers = {
         }).sort('name');
         return brands;
       } catch (e) {
-        console.log(e);
+        return e
       }
     },
     brand: async (id) => {
@@ -23,18 +22,20 @@ const resolvers = {
         const brand = await Brand.findOne({ _id: id });
         return brand;
       } catch (e) {
-        console.log(e);
+        return e
       }
     },
   },
   Mutation: {
-    createBrand: async (parent, { brand }, context) => {
+    createBrand: async (parent, { brand: { retailerId = "", name = "" } }, context) => {
       try {
-        if (validator.isEmpty(brand.name)) {
+        if (validator.isEmpty(name)) {
           console.log('name is empty');
           throw new Error('Brand name is empty');
         }
-        const newBrand = await Brand.create({ ...brand });
+        const brand = retailerId ? { name, retailerId } : { name };
+        
+        const newBrand = await Brand.create(brand);
         return newBrand;
       } catch (e) {
         return e;
@@ -43,13 +44,13 @@ const resolvers = {
     updateBrand: async (parent, { brand }, context) => {
       try {
         const updatedBrand = await findOneAndUpdate(
-          { _id: item._id },
+          { _id: brand._id },
           { ...brand },
           { new: true }
         );
         return updatedBrand;
       } catch (e) {
-        console.log(e);
+        return e;
       }
     },
     deleteBrand: async (parent, { id }, context) => {
@@ -57,7 +58,7 @@ const resolvers = {
         await findByIdAndRemove({ _id: id });
         return await findOne({ _id: id });
       } catch (e) {
-        console.log(e);
+        return e
       }
     },
   },
