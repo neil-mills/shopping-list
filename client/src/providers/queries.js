@@ -27,9 +27,8 @@ const LOGIN_USER = gql`
 const CREATE_LIST = gql`
   mutation createList($list: ListInput!) {
     createList(list: $list) {
-      _id
-      date
-      retailerId
+      message
+      path
     }
   }
 `;
@@ -72,10 +71,10 @@ const GET_LIST = gql`
       date
       items {
         _id
-        name,
+        name
         categoryId
-        brandId,
-        size,
+        brandId
+        size
         unitId
         prices {
           listId
@@ -90,11 +89,38 @@ const GET_LIST = gql`
   }
 `;
 
+const UPDATE_LIST = gql`
+  mutation updateList($list: ListInput) {
+    updateList(list: $list) {
+      message
+      path
+    }
+  }
+`;
+
 const GET_RETAILERS = gql`
   query getRetailers {
     retailers {
       _id
       name
+    }
+  }
+`;
+
+const CREATE_RETAILER = gql`
+  mutation createRetailer($retailer: RetailerInput) {
+    createRetailer(retailer: $retailer) {
+      message
+      path
+    }
+  }
+`;
+
+const UPDATE_RETAILER = gql`
+  mutation updateRetailer($retailer: RetailerInput) {
+    updateRetailer(retailer: $retailer) {
+      message
+      path
     }
   }
 `;
@@ -111,9 +137,8 @@ const GET_BRANDS = gql`
 const CREATE_BRAND = gql`
   mutation createBrand($brand: BrandInput) {
     createBrand(brand: $brand) {
-      _id
-      retailerId
-      name
+      message
+      path
     }
   }
 `;
@@ -121,9 +146,8 @@ const CREATE_BRAND = gql`
 const UPDATE_BRAND = gql`
   mutation updateBrand($brand: BrandInput) {
     updateBrand(brand: $brand) {
-      _id
-      retailerId
-      name
+      message
+      path
     }
   }
 `;
@@ -140,8 +164,8 @@ const GET_CATEGORIES = gql`
 const CREATE_CATEGORY = gql`
   mutation createCategory($category: CategoryInput) {
     createCategory(category: $category) {
-      _id
-      name
+      message
+      path
     }
   }
 `;
@@ -149,8 +173,8 @@ const CREATE_CATEGORY = gql`
 const UPDATE_CATEGORY = gql`
   mutation updateCategory($category: CategoryInput) {
     updateCategory(category: $category) {
-      _id
-      name
+      message
+      path
     }
   }
 `;
@@ -164,10 +188,29 @@ const GET_UNITS = gql`
   }
 `;
 
+const CREATE_UNIT = gql`
+  mutation createUnit($unit: UnitInput) {
+    createUnit(unit: $unit) {
+      message
+      path
+    }
+  }
+`;
+
+const UPDATE_UNIT = gql`
+  mutation updateUnit($unit: UnitInput) {
+    updateUnit(unit: $unit) {
+      message
+      path
+    }
+  }
+`;
+
 const CREATE_ITEM = gql`
   mutation createItem($listId: ID, $item: ItemInput) {
     createItem(listId: $listId, item: $item) {
-      _id
+      message
+      path
     }
   }
 `;
@@ -175,14 +218,15 @@ const CREATE_ITEM = gql`
 const UPDATE_ITEM = gql`
   mutation updateItem($listId: ID, $item: ItemInput) {
     updateItem(listId: $listId, item: $item) {
-      _id
+      message
+      path
     }
   }
 `;
 
 const DELETE_ITEM = gql`
-  mutation deleteItem($listId: ID, $id: ID) {
-    deleteItem(listId: $listId, id: $id) {
+  mutation deleteItem($listId: ID, $_id: ID) {
+    deleteItem(listId: $listId, _id: $_id) {
       _id
     }
   }
@@ -194,6 +238,7 @@ export {
   CREATE_LIST,
   GET_LISTS,
   GET_LIST,
+  UPDATE_LIST,
   GET_BRANDS,
   CREATE_BRAND,
   UPDATE_BRAND,
@@ -201,9 +246,13 @@ export {
   CREATE_CATEGORY,
   UPDATE_CATEGORY,
   GET_UNITS,
+  CREATE_UNIT,
+  UPDATE_UNIT,
   IS_LOGGED_IN,
   CREATE_ITEM,
   UPDATE_ITEM,
   DELETE_ITEM,
   GET_RETAILERS,
+  CREATE_RETAILER,
+  UPDATE_RETAILER,
 };

@@ -6,7 +6,7 @@ export const useForm = (callback, data) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const isArray = name.includes('[]');
-    const key = isArray ? name.replace('[]', '') : name;
+  const key = isArray ? name.replace('[]', '') : name;
     const newValue = isArray
       ? Array.from(e.target.form.querySelectorAll(`[name="${name}"]`)).map(
           (elm) => elm.value
@@ -15,13 +15,10 @@ export const useForm = (callback, data) => {
     setValues({ ...values, [key]: newValue });
   };
   const handleSubmit = (e) => {
+    console.log('submit')
     e.preventDefault();
     callback(values);
   };
-
-  useEffect(() => {
-    console.log('new values=', values);
-  }, [values]);
 
   return { values, handleChange, handleSubmit, setValues };
 };

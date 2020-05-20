@@ -1,6 +1,5 @@
 const Brand = require('../models/Brand');
-const validator = require('validator');
-
+const { formatError, validator } = require('../handlers/errors');
 const resolvers = {
   Query: {
     brands: async (parent, { retailerId }, context) => {
@@ -29,16 +28,17 @@ const resolvers = {
   Mutation: {
     createBrand: async (parent, { brand: { retailerId = "", name = "" } }, context) => {
       try {
-        if (validator.isEmpty(name)) {
-          console.log('name is empty');
-          throw new Error('Brand name is empty');
-        }
-        const brand = retailerId ? { name, retailerId } : { name };
-        
+        await validator.validate({retailerId, name}, { abortEarly: false });
+      } catch (e) {
+        return formatError(e);
+      }
+
+      try {
+        const brand = retailerId ? { name, retailerId } : { name };        
         const newBrand = await Brand.create(brand);
         return newBrand;
       } catch (e) {
-        return e;
+        return formatError(e);
       }
     },
     updateBrand: async (parent, { brand }, context) => {

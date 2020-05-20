@@ -21,8 +21,8 @@ const typeDefs = gql`
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createBrand(brand: BrandInput): Brand
-    updateBrand(brand: BrandInput): Brand
+    createBrand(brand: BrandInput): [Error]
+    updateBrand(brand: BrandInput): [Error]
     deleteBrand(id: ID): Boolean
   }
 `;

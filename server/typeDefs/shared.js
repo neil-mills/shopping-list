@@ -8,6 +8,12 @@ const typeDefs = gql`
   type Token {
     token: String!
   }
+
+  type Error {
+    message: String!
+    path: String!
+  }
+  
 `;
 
 module.exports = typeDefs;

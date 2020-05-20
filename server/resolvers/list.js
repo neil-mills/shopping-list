@@ -1,4 +1,5 @@
 const List = require('../models/List');
+const { list, formatError } = require('../handlers/errors');
 
 const resolvers = {
   Query: {
@@ -16,6 +17,10 @@ const resolvers = {
         : query;
       try {
         const lists = await List.find(query)
+          .populate({
+            path: 'items',
+            model: 'Item',
+          })
           .populate('retailerId')
           .sort('date-1');
         return lists;
@@ -28,9 +33,10 @@ const resolvers = {
         const list = await List.findOne({ _id: id })
           .populate({
             path: 'items',
-            model: 'Item'
+            model: 'Item',
           })
-          .populate('retailerId').exec()
+          .populate('retailerId')
+          .exec();
         return list;
       } catch (e) {
         return e;
@@ -38,24 +44,37 @@ const resolvers = {
     },
   },
   Mutation: {
-    createList: async (parent, { list }, context) => {
+    createList: async (parent, { list: {date, retailerId, items, complete} }, context) => {
       try {
-        const newList = await List.create({ ...list });
-        return newList;
+        await list.validate({date, retailerId}, { abortEarly: false });
       } catch (e) {
-        return e;
+        return formatError(e);
+      }
+      try {
+        const newList = await List.create({ users, date, items, authorId, retailerId, complete });
+        return null;
+      } catch (e) {
+        return formatError(e);
       }
     },
-    updateList: async (parent, { list }, context) => {
+    updateList: async (parent, { list: { _id, date, retailerId, items, complete } }, context) => {
+      console.log({ _id, date, retailerId, items })
       try {
-        const updated = await findOneAndUpdate(
-          { _id: list._id },
-          { ...list },
+        await list.validate({date, retailerId}, { abortEarly: false });
+      } catch (e) {
+        console.log('ERRORS=',e)
+        return formatError(e);
+      }
+
+      try {
+        const updated = await List.findOneAndUpdate(
+          { _id },
+          {  date, retailerId, items, complete },
           { new: true }
         );
-        return updated;
+        return null;
       } catch (e) {
-        return e;
+        return formatError(e)
       }
     },
     deleteList: async (parent, { id }, context) => {
@@ -64,55 +83,6 @@ const resolvers = {
         return await List.findOne({ _id: id });
       } catch (e) {
         return e;
-      }
-    },
-    createListItem: async (parent, { id, listItem }, context) => {
-      try {
-        const updatedList = await List.findOneAndUpdate(
-          { _id: id },
-          {
-            $push: {
-              items: {
-                ...listItem,
-              },
-            },
-          },
-          { new: true }
-        );
-        return updatedList;
-      } catch (e) {
-        return e;
-      }
-    },
-    updateListItem: async (parent, { listId, listItem }, context) => {
-      try {
-        List.findOneAndUpdate(
-          { _id: listId, 'items._id': 'listItem._id' },
-          {
-            $set: {
-              'items.$.itemId': listItem.itemId,
-              'items.$.sizeId': listItem.sizeId,
-            },
-          }
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    deleteListItem: async (parent, { listId, id }, context) => {
-      try {
-        const updatedList = await List.findOneAndUpdate(
-          { _id: listId },
-          {
-            $pull: {
-              items: { _id: id },
-            },
-          },
-          { new: true }
-        );
-        return updatedList;
-      } catch (e) {
-        console.log(e);
       }
     },
   },

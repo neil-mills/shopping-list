@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useForm } from '../hooks';
+import { withNotifications } from './withNotifications';
 import {
   CREATE_BRAND,
   UPDATE_BRAND,
@@ -8,9 +9,10 @@ import {
   GET_RETAILERS
 } from '../providers/queries';
 
-const EditBrandForm = ({ brand = {}, retailerId }) => {
+const EditBrandForm = ({ brand = {}, retailerId, notifications }) => {
   const mutation = brand._id ? UPDATE_BRAND : CREATE_BRAND;
-  const [fn, { loading, error }] = useMutation(mutation);
+  const key = brand._id ? 'updateBrand' : 'createBrand';
+  const [editFn, { called, loading, error, data = {} }] = useMutation(mutation);
 
   const { data: { retailers = [] } = {}, loading: loadingRetailers, error: errorLoadingRetailers } = useQuery(GET_RETAILERS);
 
@@ -21,7 +23,7 @@ const EditBrandForm = ({ brand = {}, retailerId }) => {
   };
 
   const editBrand = (brand) =>
-    fn({
+    editFn({
       variables: { brand: { ...brand } },
       refetchQueries: [{ query: GET_BRANDS, variables: { retailerId } }],
     });
@@ -31,8 +33,7 @@ const EditBrandForm = ({ brand = {}, retailerId }) => {
   return (
     <Fragment>
     <h3>Brand</h3>
-      {loading && <p>Loading</p>}
-      {error && <p>{error.message}</p>}
+      {notifications({ called, loading, error, data, key })}
     <form method="POST" onSubmit={handleSubmit}>
       <ul>
         <li>
@@ -71,4 +72,4 @@ const EditBrandForm = ({ brand = {}, retailerId }) => {
   );
 };
 
-export default EditBrandForm;
+export default withNotifications(EditBrandForm );

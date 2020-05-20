@@ -1,4 +1,5 @@
 const Retailer = require('../models/Retailer');
+const { validator, formatError } = require('../handlers/errors');
 
 const resolvers = {
   Query: {
@@ -20,24 +21,34 @@ const resolvers = {
     },
   },
   Mutation: {
-    createRetailer: async (obj, { retailer }, context) => {
+    createRetailer: async (obj, { retailer: { name } }, context) => {
       try {
-        const newRetailer = await Retailer.create({ ...retailer });
-        return newRetailer;
+        await validator.validate({name}, { abortEarly: false });
       } catch (e) {
-        console.log(e);
+        return formatError(e);
+      }
+      try {
+        const newRetailer = await Retailer.create({ name });
+        return null;
+      } catch (e) {
+        return formatError(e);
       }
     },
     updateRetailer: async (obj, { retailer }, context) => {
+      try {
+        await validator.validate(retailer, { abortEarly: false });
+      } catch (e) {
+        return formatError(e);
+      }
       try {
         const updated = await Retailer.findOneAndUpdate(
           { _id: retailer._id },
           { ...retailer },
           { new: true }
         );
-        return updated;
+        return null;
       } catch (e) {
-        console.log(e);
+        formatError(e);
       }
     },
     deleteRetailer: async (obj, { id }, context) => {

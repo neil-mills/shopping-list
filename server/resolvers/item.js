@@ -1,5 +1,6 @@
 const Item = require('../models/Item');
 const List = require('../models/List');
+const { validator, formatError } = require('../handlers/errors');
 
 const resolvers = {
   Query: {
@@ -38,6 +39,12 @@ const resolvers = {
       context
     ) => {
       try {
+        await validator.validate({ name, categoryId, brandId, unitId, size, price }, { abortEarly: false });
+      } catch (e) {
+      return formatError(e);
+      }
+
+      try {
         const newItem = await Item.create({
           name,
           categoryId,
@@ -73,6 +80,12 @@ const resolvers = {
       context
     ) => {
       try {
+        await validator.validate({ name, categoryId, brandId, unitId, size, price }, { abortEarly: false });
+      } catch (e) {
+        return formatError(e)
+      }
+
+      try {
         const newItem = await Item.findOneAndUpdate(
           { _id: _id },
           { name, categoryId, brandId, unitId, size },
@@ -85,9 +98,9 @@ const resolvers = {
             { upsert: true, new: true }
           );
         }
-        return newItem;
+        return null;
       } catch (e) {
-        return e;
+        return formatError(e);
       }
     },
     deleteItem: async (parent, { id }, context) => {

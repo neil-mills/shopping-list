@@ -1,11 +1,6 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-  type ListItem {
-    _id: ID!
-    itemId: ID!
-    sizeId: ID!
-  }
 
   type List {
     _id: ID!
@@ -24,16 +19,10 @@ const typeDefs = gql`
     maxDate: Date
   }
 
-  input ListItemInput {
-    _id: ID!
-    itemId: ID!
-    sizeId: ID!
-  }
-
   input ListInput {
     _id: ID
     date: Date!
-    items: [ListItemInput]
+    items: [ID]
     authorId: ID
     retailerId: ID
     complete: Boolean
@@ -43,17 +32,13 @@ const typeDefs = gql`
   type Query {
     lists(filters: ListFilterInput): [List]
     list(id: ID): List
-    listItems(listId: ID): [ListItem]
   }
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createList(list: ListInput): List
-    updateList(list: ListInput): List
+    createList(list: ListInput): [Error]
+    updateList(list: ListInput): [Error]
     deleteList(id: ID): List
-    createListItem(listItem: ListItemInput): ListItem
-    updateListItem(listItem: ListItemInput): ListItem
-    deleteListItem(id: ID): ListItem
   }
 `;
 

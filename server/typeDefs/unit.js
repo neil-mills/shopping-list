@@ -13,8 +13,8 @@ const typeDefs = gql`
     units: [Unit]  
   }
   type Mutation {
-    createUnit(unit: UnitInput): Unit
-    updateUnit(unit: UnitInput): Unit
+    createUnit(unit: UnitInput): [Error]
+    updateUnit(unit: UnitInput): [Error]
     deleteUnit(id: ID): Unit
   }
 `;

@@ -6,10 +6,13 @@ import {
   UPDATE_CATEGORY,
   GET_CATEGORIES,
 } from '../providers/queries';
+import { withNotifications } from './withNotifications';
 
-const EditCategoryForm = ({ category = {} }) => {
+const EditCategoryForm = ({ category = {}, notifications }) => {
   const mutation = category._id ? UPDATE_CATEGORY : CREATE_CATEGORY;
-  const [fn, { loading, error }] = useMutation(mutation);
+  const key = category._id ? 'updateCategory' : 'createCategory';
+
+  const [fn, { called, loading, error, data }] = useMutation(mutation);
 
   const fields = {
     _id: category._id || '',
@@ -27,8 +30,7 @@ const EditCategoryForm = ({ category = {} }) => {
   return (
     <Fragment>
     <h3>Category</h3>
-      {loading && <p>Loading</p>}
-      {error && <p>{error.message}</p>}
+    {notifications({ called, loading, error, data, key })}
     <form method="POST" onSubmit={handleSubmit}>
       <ul>
         <li>
@@ -51,4 +53,4 @@ const EditCategoryForm = ({ category = {} }) => {
   );
 };
 
-export default EditCategoryForm;
+export default withNotifications(EditCategoryForm);

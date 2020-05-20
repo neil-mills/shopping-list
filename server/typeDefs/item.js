@@ -21,12 +21,12 @@ const typeDefs = gql`
 
   input ItemInput {
     _id: ID
-    name: String!
+    name: String
     userId: ID!
-    categoryId: ID!
-    brandId: ID!
-    unitId: ID!
-    size: Float!
+    categoryId: ID
+    brandId: ID
+    unitId: ID
+    size: Float
     price: Float
     favourite: Boolean
     recurring: Boolean
@@ -41,8 +41,8 @@ const typeDefs = gql`
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createItem(listId: ID, item: ItemInput): Item
-    updateItem(listId: ID, item: ItemInput): Item
+    createItem(listId: ID, item: ItemInput): [Error]
+    updateItem(listId: ID, item: ItemInput): [Error]
     deleteItem(id: ID): Item
   }
 `;

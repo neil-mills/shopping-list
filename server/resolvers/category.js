@@ -1,4 +1,4 @@
-
+const { formatError, validator } = require('../handlers/errors');
 const Category = require('../models/Category');
 
 const resolvers = {
@@ -18,23 +18,33 @@ const resolvers = {
       } catch (e) {
         return e;
       }
-    }
+    },
   },
   Mutation: {
     createCategory: async (parent, { category: { name } }, context) => {
       try {
+        await validator.validate({ name }, { abortEarly: false });
+      } catch (e) {
+        return formatError(e);
+      }
+
+      try {
         const newCategory = await Category.create({ name });
         return newCategory;
       } catch (e) {
-        return e;
+        return formatError(e);
       }
     },
     updateCategory: async (parent, { category }, context) => {
       try {
-        const updated = await findOneAndUpdate({ _id: category._id }, { ...category }, { new: true });
+        const updated = await findOneAndUpdate(
+          { _id: category._id },
+          { ...category },
+          { new: true }
+        );
         return updated;
       } catch (e) {
-        return e
+        return e;
       }
     },
     deleteCategory: async (parent, { id }, context) => {
@@ -44,7 +54,7 @@ const resolvers = {
       } catch (e) {
         return e;
       }
-    }
+    },
   },
 };
 

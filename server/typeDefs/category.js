@@ -19,8 +19,8 @@ const typeDefs = gql`
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createCategory(category: CategoryInput): Category
-    updateCategory(category: CategoryInput): Category
+    createCategory(category: CategoryInput): [Error]
+    updateCategory(category: CategoryInput): [Error]
     deleteCategory(id: ID): Category
   }
 `;

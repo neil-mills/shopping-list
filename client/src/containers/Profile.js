@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { withCurrentUser } from '../providers';
-import EditListForm from '../components/EditListForm';
 import Lists from '../components/Lists';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_LISTS } from '../providers/queries';
@@ -40,7 +39,6 @@ const Profile = ({ loading, error, data: { currentUser = {} } = {} }) => {
           <Lists items={completeLists} />
         </div>
       )}
-      {!loading && !error && currentUser && <EditListForm user={currentUser} />}
     </Fragment>
   );
 };

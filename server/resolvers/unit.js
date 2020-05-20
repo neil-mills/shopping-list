@@ -1,5 +1,5 @@
 const Unit = require('../models/Unit');
-
+const { validator, formatError } = require('../handlers/errors');
 const resolvers = {
   Query: {
     units: async () => {
@@ -12,18 +12,30 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUnit: async (parent, { unit }, context) => {
+    createUnit: async (parent, { unit: {name} }, context) => {
       try {
-        const newUnit = await Unit.create({ ...unit });
+        await validator.validate({ name }, { abortEarly: false });
+      } catch (e) {
+        return formatError(e);
+      }
+
+      try {
+        const newUnit = await Unit.create({ name });
         return newUnit;
       } catch (e) {
-        return e;
+        return formatError(e);
       }
     },
-    updateUnit: async (parent, { unit }, context) => {
+    updateUnit: async (parent, { unit:{_id, name} }, context) => {
+      try {
+        await validator.validate({ name }, { abortEarly: false });
+      } catch (e) {
+        return formatError(e);
+      }
+
       try {
         const updatedUnit = Unit.findOneAndUpdate(
-          { _id: unit._id },
+          { _id },
           { ...unit },
           { new: true }
         );

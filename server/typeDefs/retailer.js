@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   type Retailer {
     _id: ID!
-    name: String!
+    name: String
   }
   input RetailerInput {
     _id: ID
@@ -16,8 +16,8 @@ const typeDefs = gql`
 
   # define the mutation to add new posts with required fields, which
   type Mutation {
-    createRetailer(retailer: RetailerInput): Retailer
-    updateRetailer(retailer: RetailerInput): Retailer
+    createRetailer(retailer: RetailerInput): [Error!]
+    updateRetailer(retailer: RetailerInput): [Error!]
     deleteRetailer(id: ID): Retailer
   }
 `;
