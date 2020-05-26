@@ -8,7 +8,7 @@ import EditListForm from '../components/EditListForm';
 import { withCurrentUser } from '../providers';
 import EditRetailerForm from '../components/EditRetailerForm';
 
-const List = memo(({ match, data: { currentUser } = {} }) => {
+const List = ({ match, data: { currentUser } = {} }) => {
 
   const { loading, error, data: { list = {} } = {} } = useQuery(GET_LIST, {
     variables: { id: match.params.id },
@@ -30,6 +30,6 @@ const List = memo(({ match, data: { currentUser } = {} }) => {
       )}
     </Fragment>
   );
-});
+};
 
 export default withCurrentUser(List);

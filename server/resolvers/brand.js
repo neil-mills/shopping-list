@@ -1,16 +1,10 @@
 const Brand = require('../models/Brand');
-const { formatError, validator } = require('../handlers/errors');
+const { formatError, brand } = require('../handlers/errors');
 const resolvers = {
   Query: {
-    brands: async (parent, { retailerId }, context) => {
+    brands: async (parent, args, context) => {
       try {
-        const brands = await Brand.find({
-          $or: [
-            { retailerId: retailerId },
-            { retailerId: undefined },
-            { retailerId: null }
-          ]
-        }).sort('name');
+        const brands = await Brand.find().sort('name');
         return brands;
       } catch (e) {
         return e
@@ -28,7 +22,7 @@ const resolvers = {
   Mutation: {
     createBrand: async (parent, { brand: { retailerId = "", name = "" } }, context) => {
       try {
-        await validator.validate({retailerId, name}, { abortEarly: false });
+        await brand.validate({retailerId, name}, { abortEarly: false });
       } catch (e) {
         return formatError(e);
       }
@@ -36,19 +30,19 @@ const resolvers = {
       try {
         const brand = retailerId ? { name, retailerId } : { name };        
         const newBrand = await Brand.create(brand);
-        return newBrand;
+        return null;
       } catch (e) {
         return formatError(e);
       }
     },
-    updateBrand: async (parent, { brand }, context) => {
+    updateBrand: async (parent, { brand: {_id, name, retailerId} }, context) => {
       try {
         const updatedBrand = await findOneAndUpdate(
-          { _id: brand._id },
-          { ...brand },
+          { _id },
+          { name, retailerId },
           { new: true }
         );
-        return updatedBrand;
+        return null;
       } catch (e) {
         return e;
       }

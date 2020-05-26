@@ -44,6 +44,7 @@ const EditBrandForm = ({ brand = {}, retailerId, notifications }) => {
             id="name"
             value={values.name}
             onChange={handleChange}
+            placeholder="Name"
           />
           </li>
           <li>

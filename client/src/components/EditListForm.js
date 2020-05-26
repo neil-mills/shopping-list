@@ -11,7 +11,7 @@ import {
   GET_RETAILERS,
 } from '../providers/queries';
 
-const EditListForm = memo(({ list = {}, currentUser, notifications }) => {
+const EditListForm = ({ list = {}, currentUser, notifications }) => {
   const mutation = list._id ? UPDATE_LIST : CREATE_LIST;
   const key = list._id ? 'updateList' : 'createList';
   const [editFn, { called, loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(
@@ -109,6 +109,6 @@ const EditListForm = memo(({ list = {}, currentUser, notifications }) => {
     </form>
     </Fragment>
   );
-});
+};
 
 export default withNotifications(EditListForm);

@@ -126,8 +126,8 @@ const UPDATE_RETAILER = gql`
 `;
 
 const GET_BRANDS = gql`
-  query getBrands($retailerId: ID) {
-    brands(retailerId: $retailerId) {
+  query getBrands {
+    brands {
       _id
       name
     }

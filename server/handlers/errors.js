@@ -1,29 +1,34 @@
 const yup = require('yup');
-const stringNotLongEnough = (path) => `${path} is incomplete`;
 
-//schema
 const validator = yup.object().shape({
-  name: yup.string().required(stringNotLongEnough('Name')).max(200),
-  retailerId: yup.string().required('Select a retailer'),
-  brandId: yup.string().required('Select a brand'),
-  categoryId: yup.string().required('Select a category'),
-  unitId: yup.string().required('Select a unit'),
-  price: yup.string().required('Enter a price'),
-  size: yup.string().required('Enter a size'),  
+  name: yup.string().required('Enter a name').max(200),
 });
 
 const list = yup.object().shape({
   retailerId: yup.string().required('Select a retailer'),
   date: yup.date()
-})
+});
+
+const item = yup.object().shape({
+  name: yup.string().required('Enter a name').max(200),
+  categoryId: yup.string().required('Select a category'),
+  brandId: yup.string().required('Select a brand'),
+  size: yup.string().required('Enter a size'),
+  unitId: yup.string().required('Select a unit'),
+  price: yup.string().required('Enter a price'),
+});
+
+const brand = yup.object().shape({
+  name: yup.string().required('Enter a name').max(200),
+  retailerId: yup.string().required('Select a retailer')
+});
 
 const formatError = (err) => {
-//  console.log('Err=', err);
+  console.log(err.inner);
   const errors = err.inner
-    .filter((e) => e.value !== undefined)
     .map(({ value, path, message }) => ({ path, message }));
   console.log('errors=',errors);
   return errors;
 };
 
-module.exports = { validator, list, formatError };
+module.exports = { validator, list, item, brand, formatError };

@@ -26,29 +26,32 @@ const EditCategoryForm = ({ category = {}, notifications }) => {
     });
 
   const { handleChange, handleSubmit, values } = useForm(editCategory, fields);
-  
+
   return (
     <Fragment>
-    <h3>Category</h3>
-    {notifications({ called, loading, error, data, key })}
-    <form method="POST" onSubmit={handleSubmit}>
-      <ul>
-        <li>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={values.name}
-            onChange={handleChange}
-          />
-          <input type="hidden" name="_id" id="_id" value={values._id} />
-        </li>
-        <li>
-          <button type="submit" disabled={loading}>Submit</button>
-        </li>
-      </ul>
-    </form>
+      <h3>Category</h3>
+      {notifications({ called, loading, error, data, key })}
+      <form method="POST" onSubmit={handleSubmit}>
+        <ul>
+          <li>
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={values.name}
+              onChange={handleChange}
+              placeholder="Name"
+            />
+            <input type="hidden" name="_id" id="_id" value={values._id} />
+          </li>
+          <li>
+            <button type="submit" disabled={loading}>
+              Submit
+            </button>
+          </li>
+        </ul>
+      </form>
     </Fragment>
   );
 };

@@ -1,6 +1,6 @@
 const Item = require('../models/Item');
 const List = require('../models/List');
-const { validator, formatError } = require('../handlers/errors');
+const { item, formatError } = require('../handlers/errors');
 
 const resolvers = {
   Query: {
@@ -39,7 +39,7 @@ const resolvers = {
       context
     ) => {
       try {
-        await validator.validate({ name, categoryId, brandId, unitId, size, price }, { abortEarly: false });
+        await item.validate({ name, categoryId, brandId, unitId, size, price }, { abortEarly: false });
       } catch (e) {
       return formatError(e);
       }
@@ -79,8 +79,9 @@ const resolvers = {
       },
       context
     ) => {
+      console.log({ name, categoryId, brandId, unitId, size, price })
       try {
-        await validator.validate({ name, categoryId, brandId, unitId, size, price }, { abortEarly: false });
+        await item.validate({ name, categoryId, brandId, unitId, size, price }, { abortEarly: false });
       } catch (e) {
         return formatError(e)
       }

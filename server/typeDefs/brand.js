@@ -15,7 +15,7 @@ const typeDefs = gql`
 
   # define the query type that responds to the 'posts' query
   type Query {
-    brands(retailerId: ID): [Brand]
+    brands: [Brand]
     brand(id: ID): Brand
   }
 

@@ -47,7 +47,7 @@ const resolvers = {
     createList: async (parent, { list: {date, retailerId, items, complete} }, context) => {
       try {
         await list.validate({date, retailerId}, { abortEarly: false });
-      } catch (e) {
+      } catch (e) { 
         return formatError(e);
       }
       try {
@@ -62,7 +62,6 @@ const resolvers = {
       try {
         await list.validate({date, retailerId}, { abortEarly: false });
       } catch (e) {
-        console.log('ERRORS=',e)
         return formatError(e);
       }
 
